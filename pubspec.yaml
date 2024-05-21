@@ -30,6 +30,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.10+1
   sizer: ^2.0.15
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  firebase_core : any
+  firebase_auth: ^4.19.4
+  cloud_firestore: ^4.17.2
+  firebase_storage: ^11.7.4
+
 
 dev_dependencies:
   flutter_test:

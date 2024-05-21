@@ -1,14 +1,14 @@
-import 'package:schoolsync/constants.dart';
-import 'package:schoolsync/assignment_screen/assignment_screen.dart';
-import 'package:schoolsync/datesheet_screen/datesheet_screen.dart';
-import 'package:schoolsync/fee_screen/fee_screen.dart';
-import 'package:schoolsync/login_screen/login_screen.dart';
-import 'package:schoolsync/my_profile/my_profile.dart';
+// HomeScreen widget
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:schoolsync/constants.dart';
+import 'package:schoolsync/assignment_screen/assignment_screen.dart';
+import 'package:schoolsync/fee_screen/fee_screen.dart';
+import 'package:schoolsync/login_screen/login_screen.dart';
+import 'package:schoolsync/my_profile/my_profile.dart';
 import 'widgets/student_data.dart';
-
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,68 +19,91 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          //we will divide the screen into two parts
-          //fixed height for first half
+          // Fixed height container for student information
           Container(
             width: 100.w,
             height: 40.h,
             padding: EdgeInsets.all(kDefaultPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance.collection('students').snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                // Extracting data from the first document in the snapshot
+                var data = snapshot.data!.docs.first.data() as Map<String, dynamic>;
+
+                // Display student information
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        StudentName(
-                          studentName: 'Saral',
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            StudentName(
+                              studentName: data['name'],
+                            ),
+                            SizedBox(height: 5), // Added SizedBox for spacing
+                            StudentClass(
+                              studentClass: 'Class ${data['class']} | Roll no: ${data['rollno']}',
+                            ),
+                            SizedBox(height: 5), // Added SizedBox for spacing
+                            StudentYear(studentYear: data['academicYear']),
+                          ],
                         ),
-                        kHalfSizedBox,
-                        StudentClass(
-                            studentClass: 'Class X-II A | Roll no: 12'),
-                        kHalfSizedBox,
-                        StudentYear(studentYear: '2020-2021'),
+                        SizedBox(width: 10), // Added SizedBox for spacing
+                        StudentPicture(
+                          picAddress: 'assets/images/student_profile.jpeg',
+                          onPress: () {
+                            Navigator.pushNamed(
+                              context,
+                              MyProfileScreen.routeName,
+                            );
+                          },
+                        ),
                       ],
                     ),
-                    kHalfSizedBox,
-                    StudentPicture(
-                        picAddress: 'assets/images/student_profile.jpeg',
-                        onPress: () {
-                          // go to profile detail screen here
-                          Navigator.pushNamed(
-                              context, MyProfileScreen.routeName);
-                        }),
-                  ],
-                ),
-                sizedBox,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    StudentDataCard(
-                      onPress: () {
-                        //go to attendance screen
-                      },
-                      title: 'Attendance',
-                      value: '90.02%',
-                    ),
-                    StudentDataCard(
-                      onPress: () {
-                        //go to fee due screen
-                        Navigator.pushNamed(context, FeeScreen.routeName);
-                      },
-                      title: 'Fees Due',
-                      value: 'Rs- 600',
+                    SizedBox(height: 20), // Added SizedBox for spacing
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        StudentDataCard(
+                          onPress: () {
+                            // Go to attendance screen
+                          },
+                          title: 'Attendance',
+                          value: '${data['attendees']}%',
+                        ),
+                        StudentDataCard(
+                          onPress: () {
+                            // Go to fee due screen
+                            Navigator.pushNamed(context, FeeScreen.routeName);
+                          },
+                          title: 'Fees Due',
+                          value: 'Rs- ${data['dueFees']}',
+                        ),
+                      ],
                     ),
                   ],
-                )
-              ],
+                );
+              },
             ),
           ),
 
-          //other will use all the remaining height of screen
-          Expanded(
+          // Expanded container for other functionalities
+           Expanded(
             child: Container(
               width: 100.w,
               decoration: BoxDecoration(
@@ -95,10 +118,10 @@ class HomeScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        HomeCard(
+                                                HomeCard(
                           onPress: () {},
-                          icon: 'assets/icons/quiz.svg',
-                          title: 'Take Quiz',
+                          icon: 'assets/icons/ask.svg',
+                          title: 'Ask',
                         ),
                         HomeCard(
                           onPress: () {
@@ -114,10 +137,10 @@ class HomeScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        HomeCard(
+                      HomeCard(
                           onPress: () {},
-                          icon: 'assets/icons/holiday.svg',
-                          title: 'Holidays',
+                          icon: 'assets/icons/result.svg',
+                          title: 'Result',
                         ),
                         HomeCard(
                           onPress: () {},
@@ -126,39 +149,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        HomeCard(
-                          onPress: () {},
-                          icon: 'assets/icons/result.svg',
-                          title: 'Result',
-                        ),
-                        HomeCard(
-                          onPress: () {
-                            Navigator.pushNamed(
-                                context, DateSheetScreen.routeName);
-                          },
-                          icon: 'assets/icons/datesheet.svg',
-                          title: 'DateSheet',
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        HomeCard(
-                          onPress: () {},
-                          icon: 'assets/icons/ask.svg',
-                          title: 'Ask',
-                        ),
-                        HomeCard(
-                          onPress: () {},
-                          icon: 'assets/icons/gallery.svg',
-                          title: 'Gallery',
-                        ),
-                      ],
-                    ),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [

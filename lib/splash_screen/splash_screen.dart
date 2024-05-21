@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('School', style: Theme.of(context).textTheme.headline5),
+                Text('Skool', style: Theme.of(context).textTheme.headline5),
                 Text('Sync', style: Theme.of(context).textTheme.headline5),
               ],
             ),

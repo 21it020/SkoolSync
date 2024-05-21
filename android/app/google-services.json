@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "113598540940",
+    "project_id": "skoolsync-f1e68",
+    "storage_bucket": "skoolsync-f1e68.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113598540940:android:561dfcfef3b30ba7075fa9",
+        "android_client_info": {
+          "package_name": "com.example.schoolsync"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS5Ph-7uu908_6QFzG_gwqFE7fyJ10M2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113598540940:android:759df3d7416fcd63075fa9",
+        "android_client_info": {
+          "package_name": "com.example.soolsync"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS5Ph-7uu908_6QFzG_gwqFE7fyJ10M2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:schoolsync/constants.dart';
 import 'package:sizer/sizer.dart';
 
+// Define ForgotPasswordScreen widget
 class ForgotPasswordScreen extends StatelessWidget {
+  // Define route name
   static String routeName = 'ForgotPasswordScreen';
 
   @override
@@ -11,7 +13,8 @@ class ForgotPasswordScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Forgot Password'),
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.white, // Set background color to white
         padding: EdgeInsets.all(kDefaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,6 +33,7 @@ class ForgotPasswordScreen extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: 'Email Address or Mobile Number',
+                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20), // Adjust size of text box
               ),
               // Add validation logic here
             ),
@@ -38,6 +42,11 @@ class ForgotPasswordScreen extends StatelessWidget {
               onPressed: () {
                 // Implement logic to send reset link
               },
+              // Change button color to blue
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 23, 101, 164)), // Set background color to blue
+                foregroundColor: MaterialStateProperty.all(Colors.white), // Set text color to white
+              ),
               child: Text('Reset Password'),
             ),
           ],
